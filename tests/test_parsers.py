@@ -1,4 +1,7 @@
-"""Parser tests. When you get a share text that parses wrongly, add it here."""
+"""Parser tests. When you get a share text that parses wrongly, add it here.
+
+The REAL_* texts are copied from the actual games.
+"""
 
 from app.games import detect
 
@@ -58,3 +61,34 @@ def test_krillion():
     assert game.slug == "krillion"
     assert (r.puzzle, r.solved, r.score) == (134, True, 330)
     assert r.details["answers"] == "🏮🐟🦑🐟🫧🏮🐟"
+
+
+def test_real_wordle():
+    _, r = detect("Wordle 1,986 5/6\n\n⬛⬛⬛🟨🟩\n🟨🟨⬛⬛🟩\n⬛🟩🟩🟩🟩\n⬛🟩🟩🟩🟩\n🟩🟩🟩🟩🟩")
+    assert (r.puzzle, r.solved, r.score, len(r.details["grid"])) == (1986, True, 5, 5)
+
+
+def test_real_connections_failed():
+    text = "Connections\nPuzzle #1264\n🟩🟩🟩🟩\n🟦🟪🟦🟦\n🟪🟨🟦🟦\n🟦🟪🟦🟨\n🟦🟪🟦🟪"
+    _, r = detect(text)
+    assert (r.puzzle, r.solved, r.score, r.details["order"]) == (1264, False, 4, ["green"])
+
+
+def test_real_strands():
+    _, r = detect("Strands #998\n“A crowded table”\n💡🔵💡🔵\n💡🔵💡🔵\n🟡🔵")
+    assert (r.puzzle, r.score, r.details["theme"], r.details["spangram_at"]) == (998, 4, "A crowded table", 5)
+
+
+def test_real_travle():
+    _, r = detect("#travle #1443 +1\n✅✅✅🟩✅✅✅🟧✅\nhttps://travle.earth")
+    assert (r.puzzle, r.solved, r.score) == (1443, True, 1)
+    assert r.details["grid"] == "✅✅✅🟩✅✅✅🟧✅"
+
+
+def test_travle_without_score_is_unsolved():
+    _, r = detect("#travle #1444\n🟥🟥🟧\nhttps://travle.earth")
+    assert (r.puzzle, r.solved, r.score) == (1444, False, None)
+
+
+def test_travle_regional_variant_is_ignored():
+    assert detect("#travle_usa #50 +1\n✅✅") == (None, None)
