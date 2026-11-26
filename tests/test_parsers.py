@@ -51,3 +51,10 @@ def test_windows_line_endings_and_whitespace():
 
 def test_unknown_text():
     assert detect("hello there") == (None, None)
+
+
+def test_krillion():
+    game, r = detect("Krillion #134 🦐\n330\n\n🏮🐟🦑🐟🫧🏮🐟")
+    assert game.slug == "krillion"
+    assert (r.puzzle, r.solved, r.score) == (134, True, 330)
+    assert r.details["answers"] == "🏮🐟🦑🐟🫧🏮🐟"

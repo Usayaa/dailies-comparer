@@ -209,9 +209,14 @@ def game_stats(game, results, latest_puzzle):
     pick_best = min if game.lower_is_better else max
     current, best_streak = streaks({r.puzzle for r in solved}, latest_puzzle)
     # Distribution: how often each score occurred; unsolved games count as "✗".
-    counts = Counter("✗" if not r.solved else r.score for r in results if not r.solved or r.score is not None)
-    # Sort by score, with "✗" last.
-    distribution = sorted(counts.items(), key=lambda item: (item[0] == "✗", 0 if item[0] == "✗" else item[0]))
+    counts = Counter(game.bucket(r.score) for r in solved if r.score is not None)
+    # Best scores first: ascending, or descending for games where higher wins.
+    buckets = sorted(counts, reverse=not game.lower_is_better)
+    distribution = [(game.bucket_label(b), counts[b]) for b in buckets]
+    failed = len(results) - len(solved)
+    if failed:
+        distribution.append(("✗", failed))
+        counts["✗"] = failed
     return {
         "played": len(results),
         "solved": len(solved),

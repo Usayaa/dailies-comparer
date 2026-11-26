@@ -37,6 +37,13 @@ class Game:
         """Short text shown in tables, e.g. "4/6". `result` is a models.Result."""
         return str(result.score) if result.score is not None else "–"
 
+    def bucket(self, score: int) -> int:
+        """Group scores for the distribution on the stats page (default: none)."""
+        return score
+
+    def bucket_label(self, bucket: int) -> str:
+        return str(bucket)
+
     def spoiler_free_summary(self, result) -> str:
         """What other players see before they have played this puzzle themselves."""
         return "✓"

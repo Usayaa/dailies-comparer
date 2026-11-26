@@ -74,7 +74,7 @@ TEXTS = {
     "score_connections": {"de": "Fehler", "en": "mistakes"},
     "score_strands": {"de": "Hinweise", "en": "hints"},
     "score_travle": {"de": "Extra-Versuche", "en": "extra guesses"},
-    "score_krillion": {"de": "Punkte", "en": "score"},
+    "score_krillion": {"de": "Punkte (mehr ist besser)", "en": "points (higher is better)"},
     "stats_help": {
         "de": "Serie = gelöste Rätsel mit aufeinanderfolgenden Nummern. Durchschnitt nur über gelöste Rätsel.",
         "en": "Streak = solved puzzles with consecutive numbers. Average over solved puzzles only.",

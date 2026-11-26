@@ -110,3 +110,18 @@ def test_german_is_default(app):
         db.session.add(user)
         db.session.commit()
     assert b"Statistiken" in client_for(app, "dora").get("/").data
+
+
+def test_krillion_stats_higher_is_better(app):
+    anna = client_for(app, "anna")
+    anna.post("/submit", data={"text": "Krillion #134 🦐\n330\n\n🏮🐟🦑🐟🫧🏮🐟"})
+    anna.post("/submit", data={"text": "Krillion #135 🦐\n510\n\n🏮🐟🦑🐟🫧🏮🐟"})
+    with app.app_context():
+        from app.games import GAMES
+        from app.main import game_stats
+        from app.models import Result
+
+        stats = game_stats(GAMES["krillion"], Result.query.all(), 135)
+    assert stats["best"] == 510
+    assert stats["average"] == 420
+    assert stats["distribution"] == [("500+", 1), ("300+", 1)]
