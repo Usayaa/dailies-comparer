@@ -125,3 +125,12 @@ def test_krillion_stats_higher_is_better(app):
     assert stats["best"] == 510
     assert stats["average"] == 420
     assert stats["distribution"] == [("500+", 1), ("300+", 1)]
+
+
+def test_travle_failed_summary(app):
+    anna = client_for(app, "anna")
+    response = anna.post(
+        "/submit", data={"text": "#travle #84 (3 away)\n🟥🟥🟥🟥🟥🟥🟥\nhttps://travle.earth"},
+        follow_redirects=True,
+    )
+    assert "Saved Travle #84: ✗ (3 away)".encode() in response.data

@@ -73,6 +73,7 @@ TEXTS = {
     "score_wordle": {"de": "Versuche", "en": "guesses"},
     "score_connections": {"de": "Fehler", "en": "mistakes"},
     "score_strands": {"de": "Hinweise", "en": "hints"},
+    "travle_away": {"de": "✗ (noch {n})", "en": "✗ ({n} away)"},
     "score_travle": {"de": "Extra-Versuche", "en": "extra guesses"},
     "score_krillion": {"de": "Punkte (mehr ist besser)", "en": "points (higher is better)"},
     "stats_help": {

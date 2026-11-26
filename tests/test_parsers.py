@@ -85,9 +85,15 @@ def test_real_travle():
     assert r.details["grid"] == "✅✅✅🟩✅✅✅🟧✅"
 
 
-def test_travle_without_score_is_unsolved():
-    _, r = detect("#travle #1444\n🟥🟥🟧\nhttps://travle.earth")
-    assert (r.puzzle, r.solved, r.score) == (1444, False, None)
+def test_real_travle_perfect():
+    _, r = detect("#travle #859 +0 (Perfect)\n✅✅✅✅✅✅✅\nhttps://travle.earth")
+    assert (r.puzzle, r.solved, r.score, r.details["hints"]) == (859, True, 0, 0)
+
+
+def test_real_travle_failed():
+    _, r = detect("#travle #38 (2 away)\n🟥🟥🟥🟥🟩🟥🟥\nhttps://travle.earth")
+    assert (r.puzzle, r.solved, r.score, r.details["away"]) == (38, False, None, 2)
+    assert r.details["grid"] == "🟥🟥🟥🟥🟩🟥🟥"
 
 
 def test_travle_regional_variant_is_ignored():
