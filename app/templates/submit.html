@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ _("submit_title") }}{% endblock %}
+{% block content %}
+  <section class="card narrow">
+    <h1>{{ _("submit_title") }}</h1>
+    <p class="muted">{{ _("submit_help") }}</p>
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <textarea name="text" rows="10" required autofocus placeholder="Wordle 1,621 4/6&#10;&#10;⬛🟨⬛⬛⬛&#10;…">{{ text }}</textarea>
+      <button type="submit">{{ _("submit_button") }}</button>
+    </form>
+    <p class="muted small">
+      {% for game in GAMES.values() %}<a href="{{ game.url }}" target="_blank" rel="noopener">{{ game.name }}</a>{% if not loop.last %} · {% endif %}{% endfor %}
+    </p>
+  </section>
+{% endblock %}

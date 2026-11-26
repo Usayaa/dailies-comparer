@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ game.name }} #{{ puzzle }}{% endblock %}
+{% block content %}
+  <p><a href="{{ url_for('main.game', slug=game.slug) }}">← {{ game.name }}</a></p>
+  <h1>{{ game.name }} #{{ puzzle }}</h1>
+
+  {% if current_user.hide_spoilers and puzzle not in played %}
+    <p class="flash info">{{ _("play_first") }}</p>
+  {% endif %}
+
+  {% if not results %}<p class="muted">{{ _("no_results") }}</p>{% endif %}
+
+  <div class="share-grid">
+  {% for result in results %}
+    <article class="card share">
+      <header>
+        <strong>{{ result.user.username }}</strong>
+        {% if may_see(result, played) %}
+          <span class="badge {{ 'solved' if result.solved else 'failed' }}">{{ result.summary }}</span>
+        {% else %}
+          <span class="badge hidden">{{ game.spoiler_free_summary(result) }}</span>
+        {% endif %}
+      </header>
+      {% if may_see(result, played) %}
+        <pre>{{ result.raw_text }}</pre>
+      {% endif %}
+      <footer class="muted">
+        {{ result.submitted_at | localtime }}
+        {% if result.user_id == current_user.id or current_user.is_admin %}
+        <form method="post" action="{{ url_for('main.delete_result', result_id=result.id) }}" class="inline"
+              onsubmit="return confirm('{{ _('confirm_delete') }}')">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="link danger">{{ _("delete") }}</button>
+        </form>
+        {% endif %}
+      </footer>
+    </article>
+  {% endfor %}
+  </div>
+{% endblock %}

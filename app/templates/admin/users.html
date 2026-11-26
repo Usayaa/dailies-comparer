@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ _("admin_title") }}{% endblock %}
+{% block content %}
+  <section class="card">
+    <h1>{{ _("admin_title") }}</h1>
+    <div class="table-wrap">
+    <table class="results">
+      <thead><tr><th>{{ _("username") }}</th><th>{{ _("is_admin") }}</th><th>{{ _("results_count") }}</th><th></th></tr></thead>
+      <tbody>
+      {% for user in users %}
+        <tr>
+          <td>{{ user.username }}</td>
+          <td>{{ "✓" if user.is_admin }}</td>
+          <td>{{ user.results | length }}</td>
+          <td class="actions">
+            <form method="post" action="{{ url_for('admin.reset_password', user_id=user.id) }}" class="inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="link">{{ _("reset_password") }}</button>
+            </form>
+            {% if user.id != current_user.id %}
+            <form method="post" action="{{ url_for('admin.delete_user', user_id=user.id) }}" class="inline"
+                  onsubmit="return confirm('{{ _('confirm_delete') }}')">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="link danger">{{ _("delete_user") }}</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="card narrow">
+    <h2>{{ _("create_user") }}</h2>
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>{{ _("username") }}<input name="username" required maxlength="40"></label>
+      <label>{{ _("password") }}<input name="password" type="text" minlength="8" autocomplete="off"></label>
+      <p class="small muted">{{ _("leave_empty_generate") }}</p>
+      <label class="check"><input type="checkbox" name="is_admin"> {{ _("is_admin") }}</label>
+      <button type="submit">{{ _("create_user") }}</button>
+    </form>
+  </section>
+{% endblock %}

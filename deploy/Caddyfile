@@ -1,0 +1,5 @@
+# Caddy gets and renews the HTTPS certificate automatically.
+# If Caddy runs on another VM, replace 127.0.0.1 with the app VM's IP.
+daily.usaya.de {
+	reverse_proxy 127.0.0.1:8000
+}

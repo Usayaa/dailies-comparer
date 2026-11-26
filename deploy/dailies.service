@@ -1,0 +1,19 @@
+# systemd service: keeps the app running and restarts it on crashes/reboots.
+# Install: sudo cp deploy/dailies.service /etc/systemd/system/
+#          sudo systemctl daemon-reload && sudo systemctl enable --now dailies
+[Unit]
+Description=Dailies score comparer (Gunicorn)
+After=network.target
+
+[Service]
+User=dailies
+Group=dailies
+WorkingDirectory=/opt/dailies
+EnvironmentFile=/etc/dailies.env
+# 2 workers are plenty for a handful of friends.
+# Use --bind 0.0.0.0:8000 instead if Caddy/Nginx runs on a different VM.
+ExecStart=/opt/dailies/.venv/bin/gunicorn --workers 2 --bind 127.0.0.1:8000 "app:create_app()"
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

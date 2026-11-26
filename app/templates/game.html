@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "_macros.html" import result_table with context %}
+{% block title %}{{ game.name }}{% endblock %}
+{% block content %}
+  <section class="card">
+    <header>
+      <h2>{{ game.name }}</h2>
+      <a class="muted" href="{{ game.url }}" target="_blank" rel="noopener">{{ game.url | replace("https://", "") }} ↗</a>
+    </header>
+    {{ result_table(game, matrix, users, played, may_see) }}
+    <p class="pager">
+      {% if page > 1 %}<a href="{{ url_for('main.game', slug=game.slug, page=page - 1) }}">← {{ _("newer") }}</a>{% endif %}
+      {% if has_more %}<a href="{{ url_for('main.game', slug=game.slug, page=page + 1) }}">{{ _("older") }} →</a>{% endif %}
+    </p>
+  </section>
+{% endblock %}

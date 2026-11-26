@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ _("login") }}{% endblock %}
+{% block content %}
+  <section class="card narrow">
+    <h1>Dailies</h1>
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>{{ _("username") }}<input name="username" autocomplete="username" required autofocus></label>
+      <label>{{ _("password") }}<input name="password" type="password" autocomplete="current-password" required></label>
+      <button type="submit">{{ _("login") }}</button>
+    </form>
+    <p class="small muted">
+      {% for code, name in LANGUAGES.items() %}<a href="{{ url_for('auth.set_language', code=code) }}">{{ name }}</a>{% if not loop.last %} · {% endif %}{% endfor %}
+    </p>
+  </section>
+{% endblock %}

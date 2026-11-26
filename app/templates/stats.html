@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ _("stats_title") }}{% endblock %}
+{% block content %}
+  <h1>{{ _("stats_title") }}</h1>
+  <p class="small muted">{{ _("stats_help") }}</p>
+
+  {% for table in tables %}
+  {% set game = table.game %}
+  <section class="card">
+    <header><h2>{{ game.name }}</h2><span class="muted">{{ _("score_" ~ game.slug) }}</span></header>
+    <div class="table-wrap">
+    <table class="results stats">
+      <thead>
+        <tr><th></th>{% for user in users %}<th>{{ user.username }}</th>{% endfor %}</tr>
+      </thead>
+      <tbody>
+        <tr><th>{{ _("played") }}</th>{% for u in users %}<td>{{ table.per_user[u.id].played }}</td>{% endfor %}</tr>
+        <tr><th>{{ _("solved") }}</th>{% for u in users %}{% set s = table.per_user[u.id] %}<td>{{ s.solved }}{% if s.played %} <span class="muted">({{ s.solve_rate }}%)</span>{% endif %}</td>{% endfor %}</tr>
+        <tr><th>{{ _("average") }}</th>{% for u in users %}<td>{{ table.per_user[u.id].average if table.per_user[u.id].average is not none else "–" }}</td>{% endfor %}</tr>
+        <tr><th>{{ _("best") }}</th>{% for u in users %}<td>{{ table.per_user[u.id].best if table.per_user[u.id].best is not none else "–" }}</td>{% endfor %}</tr>
+        <tr><th>{{ _("streak") }}</th>{% for u in users %}<td>{{ table.per_user[u.id].streak }}</td>{% endfor %}</tr>
+        <tr><th>{{ _("best_streak") }}</th>{% for u in users %}<td>{{ table.per_user[u.id].best_streak }}</td>{% endfor %}</tr>
+        <tr>
+          <th>{{ _("distribution") }}</th>
+          {% for u in users %}{% set s = table.per_user[u.id] %}
+          <td class="distribution">
+            {% for score, count in s.distribution %}
+              <div class="bar-row">
+                <span class="bar-label">{{ score }}</span>
+                <span class="bar" style="width: {{ (100 * count / s.max_count) | round | int }}%">{{ count }}</span>
+              </div>
+            {% else %}–{% endfor %}
+          </td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+  {% endfor %}
+{% endblock %}

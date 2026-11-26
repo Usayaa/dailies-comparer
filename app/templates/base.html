@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Dailies{% endblock %} · Dailies</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  {% if current_user.is_authenticated %}
+  <nav>
+    <a class="brand" href="{{ url_for('main.index') }}">Dailies</a>
+    <a href="{{ url_for('main.submit') }}" class="button">＋ {{ _("nav_submit") }}</a>
+    <a href="{{ url_for('main.stats') }}">{{ _("nav_stats") }}</a>
+    <span class="spacer"></span>
+    {% if current_user.is_admin %}<a href="{{ url_for('admin.users') }}">{{ _("nav_admin") }}</a>{% endif %}
+    <a href="{{ url_for('auth.settings') }}">{{ current_user.username }}</a>
+    <form method="post" action="{{ url_for('auth.logout') }}" class="inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="link">{{ _("nav_logout") }}</button>
+    </form>
+  </nav>
+  {% endif %}
+
+  <main>
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+      <div class="flash {{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

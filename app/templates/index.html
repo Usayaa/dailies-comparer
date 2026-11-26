@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "_macros.html" import result_table with context %}
+{% block title %}{{ _("nav_today") }}{% endblock %}
+{% block content %}
+  {% for section in sections %}
+  <section class="card">
+    <header>
+      <h2><a href="{{ url_for('main.game', slug=section.game.slug) }}">{{ section.game.name }}</a></h2>
+      <a class="muted" href="{{ section.game.url }}" target="_blank" rel="noopener">{{ section.game.url | replace("https://", "") }} ↗</a>
+    </header>
+    {{ result_table(section.game, section.matrix, users, section.played, may_see) }}
+    <p class="more"><a href="{{ url_for('main.game', slug=section.game.slug) }}">{{ _("all_puzzles") }} →</a></p>
+  </section>
+  {% endfor %}
+{% endblock %}

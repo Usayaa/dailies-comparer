@@ -1,0 +1,35 @@
+{# The score table used on the overview and the game pages:
+   one row per puzzle, one column per player. #}
+{% macro result_table(game, matrix, users, played, may_see) %}
+  {% if matrix %}
+  <div class="table-wrap">
+  <table class="results">
+    <thead>
+      <tr>
+        <th>{{ _("puzzle") }}</th>
+        {% for user in users %}<th>{{ user.username }}</th>{% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for puzzle, row in matrix.items() %}
+      <tr>
+        <td><a href="{{ url_for('main.puzzle', slug=game.slug, puzzle=puzzle) }}">#{{ puzzle }}</a></td>
+        {% for user in users %}
+          {% set result = row.get(user.id) %}
+          {% if result is none %}
+            <td class="empty">·</td>
+          {% elif may_see(result, played) %}
+            <td class="{{ 'solved' if result.solved else 'failed' }}{{ ' mine' if result.user_id == current_user.id }}">{{ result.summary }}</td>
+          {% else %}
+            <td class="hidden" title="{{ _('play_first') }}">{{ game.spoiler_free_summary(result) }}</td>
+          {% endif %}
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+    <p class="muted">{{ _("no_results") }}</p>
+  {% endif %}
+{% endmacro %}
