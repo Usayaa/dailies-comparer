@@ -1,3 +1,7 @@
+# DISCLAIMER
+
+This is completely vibe-coded by Claude Opus 5.5 (Medium)
+
 # Dailies
 
 A small Flask website where a group of friends paste the share texts of daily
