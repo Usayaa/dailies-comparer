@@ -136,3 +136,14 @@ def test_real_loldle():
 def test_loldle_partial_modes():
     _, r = detect("#LoLdle #1605\n❓ Classic: 4\n💬 Quote: 2")
     assert set(r.details["modes"]) == {"classic", "quote"}
+
+
+def test_real_wordle_de_failed():
+    text = (
+        "Wordle auf Deutsch 362 X/6\n\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n"
+        "⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜🟨\n\nsz.de/wordle"
+    )
+    game, r = detect(text)
+    assert game.slug == "wordle-de"
+    assert (r.puzzle, r.solved, r.score) == (362, False, None)
+    assert len(r.details["grid"]) == 6  # light-mode ⬜ squares are kept too
