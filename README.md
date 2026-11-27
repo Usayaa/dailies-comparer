@@ -1,3 +1,7 @@
+# DISCLAIMER
+
+This is completely vibe-coded by Claude Opus 5.5 (Medium)
+
 # Dailies
 
 A small Flask website where a group of friends paste the share texts of daily
@@ -53,7 +57,7 @@ Every result keeps the original pasted text. After changing a parser, run
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
-.venv/bin/flask --app app create-user lukas --admin
+.venv/bin/flask --app app create-user user --admin
 .venv/bin/flask --app app run --debug
 ```
 
@@ -90,13 +94,13 @@ sudo systemctl enable --now dailies
 
 # 5. Create your admin account
 cd /opt/dailies
-sudo -u dailies .venv/bin/flask --app app create-user lukas --admin
+sudo -u dailies .venv/bin/flask --app app create-user user --admin
 ```
 
 (If you set a custom `DATABASE_URL` in `/etc/dailies.env`, pass it here too:
 `sudo -u dailies env DATABASE_URL=... .venv/bin/flask ...`.)
 
-**HTTPS:** point the DNS record for `daily.usaya.de` to your server, then use
+**HTTPS:** point the DNS record for `example.domain.com` to your server, then use
 `deploy/Caddyfile` (Caddy fetches the certificate itself) or
 `deploy/nginx.conf` + certbot. If the proxy runs on a different VM, change
 `--bind 127.0.0.1:8000` in the service file to `0.0.0.0:8000` and only allow
