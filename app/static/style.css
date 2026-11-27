@@ -109,6 +109,7 @@ td.solved { background: var(--solved); color: var(--solved-text); }
 td.failed { background: var(--failed); color: var(--failed-text); }
 td.hidden { background: var(--hidden); color: var(--muted); cursor: help; }
 td.empty { color: var(--muted); }
+table.results td { white-space: pre-line; } /* multi-line summaries, e.g. LoLdle */
 td.mine { font-weight: 700; }
 td.actions { text-align: right; }
 table.stats td { vertical-align: top; }

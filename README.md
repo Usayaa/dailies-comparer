@@ -1,14 +1,16 @@
 # Dailies
 
 A small Flask website where a group of friends paste the share texts of daily
-browser games (Wordle, Connections, Strands, Travle, krillion) and compare
+browser games (Wordle, Wordle auf Deutsch, Connections, Strands, Travle,
+krillion, Targon Climb, LoLdle) and compare
 their results per puzzle.
 
 - Accounts are created by the admin; there is no public sign-up.
 - Paste a share text, and the game and puzzle number are detected automatically.
 - **No spoilers** (on by default, can be switched off in the settings): you
   only see the others' results for a puzzle once you have submitted your own.
-- Per-player stats: solve rate, average, best, streaks, score distribution.
+- Per-player stats: solve rate, average, best, streaks, score distribution
+  (for LoLdle separately per mode).
 - German / English interface.
 
 ## How the code is organised

@@ -6,11 +6,26 @@ games appear on the website.
 
 from .connections import Connections
 from .krillion import Krillion
+from .loldle import Loldle
 from .strands import Strands
+from .targon import TargonClimb
 from .travle import Travle
 from .wordle import Wordle
+from .wordle_de import WordleDe
 
-GAMES = {game.slug: game for game in [Wordle(), Connections(), Strands(), Travle(), Krillion()]}
+GAMES = {
+    game.slug: game
+    for game in [
+        Wordle(),
+        WordleDe(),
+        Connections(),
+        Strands(),
+        Travle(),
+        Krillion(),
+        TargonClimb(),
+        Loldle(),
+    ]
+}
 
 
 def detect(text):

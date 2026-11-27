@@ -75,6 +75,9 @@ TEXTS = {
     "score_strands": {"de": "Hinweise", "en": "hints"},
     "travle_away": {"de": "✗ (noch {n})", "en": "✗ ({n} away)"},
     "score_travle": {"de": "Extra-Versuche", "en": "extra guesses"},
+    "score_wordle-de": {"de": "Versuche", "en": "guesses"},
+    "score_targon": {"de": "Meter (mehr ist besser)", "en": "metres (higher is better)"},
+    "score_loldle": {"de": "Versuche", "en": "guesses"},
     "score_krillion": {"de": "Punkte (mehr ist besser)", "en": "points (higher is better)"},
     "stats_help": {
         "de": "Serie = gelöste Rätsel mit aufeinanderfolgenden Nummern. Durchschnitt nur über gelöste Rätsel.",

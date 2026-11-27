@@ -202,25 +202,28 @@ def streaks(solved_puzzles, latest_puzzle):
     return current, best
 
 
-def game_stats(game, results, latest_puzzle):
-    """Numbers for one player and one game."""
-    solved = [r for r in results if r.solved]
-    scores = [r.score for r in solved if r.score is not None]
+def game_stats(game, entries, latest_puzzle):
+    """Numbers for one player in one game (or one mode of a game).
+
+    `entries` is a list of (puzzle, solved, score) tuples.
+    """
+    solved = [(puzzle, score) for puzzle, is_solved, score in entries if is_solved]
+    scores = [score for _, score in solved if score is not None]
     pick_best = min if game.lower_is_better else max
-    current, best_streak = streaks({r.puzzle for r in solved}, latest_puzzle)
+    current, best_streak = streaks({puzzle for puzzle, _ in solved}, latest_puzzle)
     # Distribution: how often each score occurred; unsolved games count as "✗".
-    counts = Counter(game.bucket(r.score) for r in solved if r.score is not None)
+    counts = Counter(game.bucket(score) for score in scores)
     # Best scores first: ascending, or descending for games where higher wins.
     buckets = sorted(counts, reverse=not game.lower_is_better)
     distribution = [(game.bucket_label(b), counts[b]) for b in buckets]
-    failed = len(results) - len(solved)
+    failed = len(entries) - len(solved)
     if failed:
         distribution.append(("✗", failed))
         counts["✗"] = failed
     return {
-        "played": len(results),
+        "played": len(entries),
         "solved": len(solved),
-        "solve_rate": round(100 * len(solved) / len(results)) if results else 0,
+        "solve_rate": round(100 * len(solved) / len(entries)) if entries else 0,
         "average": round(sum(scores) / len(scores), 2) if scores else None,
         "best": pick_best(scores) if scores else None,
         "streak": current,
@@ -230,18 +233,31 @@ def game_stats(game, results, latest_puzzle):
     }
 
 
+def stats_entries(game, results, category):
+    """Turn Result rows into (puzzle, solved, score) tuples for one category."""
+    entries = []
+    for result in results:
+        entry = game.stats_entry(result, category)
+        if entry is not None:
+            entries.append((result.puzzle, *entry))
+    return entries
+
+
 @bp.route("/stats")
 @login_required
 def stats():
-    """Per game, every player's numbers side by side."""
+    """Per game (and per mode for games like LoLdle), every player side by side."""
     users = all_users()
     tables = []
     for game in GAMES.values():
         results = Result.query.filter_by(game_slug=game.slug).all()
         latest = max((r.puzzle for r in results), default=None)
-        per_user = {
-            user.id: game_stats(game, [r for r in results if r.user_id == user.id], latest)
-            for user in users
-        }
-        tables.append({"game": game, "per_user": per_user})
+        for category in game.categories:
+            per_user = {}
+            for user in users:
+                mine = [r for r in results if r.user_id == user.id]
+                per_user[user.id] = game_stats(game, stats_entries(game, mine, category), latest)
+            tables.append(
+                {"game": game, "title": game.category_title(category), "per_user": per_user}
+            )
     return render_template("stats.html", tables=tables, users=users)

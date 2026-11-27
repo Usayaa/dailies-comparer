@@ -37,6 +37,18 @@ class Game:
         """Short text shown in tables, e.g. "4/6". `result` is a models.Result."""
         return str(result.score) if result.score is not None else "–"
 
+    # Games with several modes that are compared separately (e.g. LoLdle) list
+    # them here; each mode then gets its own table on the stats page.
+    categories = [None]
+
+    def category_title(self, category) -> str:
+        """Heading of a stats table."""
+        return self.name
+
+    def stats_entry(self, result, category):
+        """(solved, score) of a result in a category, or None if it wasn't played."""
+        return result.solved, result.score
+
     def bucket(self, score: int) -> int:
         """Group scores for the distribution on the stats page (default: none)."""
         return score

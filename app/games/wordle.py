@@ -26,10 +26,11 @@ class Wordle(Game):
     slug = "wordle"
     name = "Wordle"
     url = "https://www.nytimes.com/games/wordle"
+    header = HEADER  # replaced by the German version in wordle_de.py
 
     def parse(self, text):
         text = normalize(text)
-        match = HEADER.search(text)
+        match = self.header.search(text)
         if not match:
             return None
         number, guesses, hard = match.groups()

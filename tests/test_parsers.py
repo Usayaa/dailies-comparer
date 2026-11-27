@@ -98,3 +98,41 @@ def test_real_travle_failed():
 
 def test_travle_regional_variant_is_ignored():
     assert detect("#travle_usa #50 +1\n✅✅") == (None, None)
+
+
+def test_real_wordle_de_is_not_english_wordle():
+    game, r = detect("Wordle auf Deutsch 362 1/6\n\n🟩🟩🟩🟩🟩\n\nsz.de/wordle")
+    assert game.slug == "wordle-de"
+    assert (r.puzzle, r.solved, r.score, r.details["grid"]) == (362, True, 1, ["🟩🟩🟩🟩🟩"])
+
+
+def test_real_targon():
+    text = (
+        "Targon Climb #16 · 1,500 m\n🧗 Reached Lunari Hollow\n\n"
+        "Higher than 32% of players today\nhttps://targonclimb.com"
+    )
+    game, r = detect(text)
+    assert game.slug == "targon"
+    assert (r.puzzle, r.solved, r.score) == (16, True, 1500)
+    assert r.details == {"reached": "Lunari Hollow", "higher_than_percent": 32}
+
+
+def test_real_loldle():
+    text = (
+        "I've completed all the modes of #LoLdle #1604 today:\n❓ Classic: 7\n💬 Quote: 1\n"
+        "🔥 Ability: 3 🧠 ✓\n😀 Emoji: 2\n🎨 Splash: 2 ✓\n\nhttps://loldle.net"
+    )
+    game, r = detect(text)
+    assert game.slug == "loldle"
+    assert r.puzzle == 1604
+    modes = r.details["modes"]
+    assert {k: v["guesses"] for k, v in modes.items()} == {
+        "classic": 7, "quote": 1, "ability": 3, "emoji": 2, "splash": 2,
+    }
+    assert modes["ability"] == {"guesses": 3, "bonus": True, "brain": True}
+    assert modes["classic"]["bonus"] is False
+
+
+def test_loldle_partial_modes():
+    _, r = detect("#LoLdle #1605\n❓ Classic: 4\n💬 Quote: 2")
+    assert set(r.details["modes"]) == {"classic", "quote"}

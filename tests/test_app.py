@@ -118,10 +118,11 @@ def test_krillion_stats_higher_is_better(app):
     anna.post("/submit", data={"text": "Krillion #135 🦐\n510\n\n🏮🐟🦑🐟🫧🏮🐟"})
     with app.app_context():
         from app.games import GAMES
-        from app.main import game_stats
+        from app.main import game_stats, stats_entries
         from app.models import Result
 
-        stats = game_stats(GAMES["krillion"], Result.query.all(), 135)
+        game = GAMES["krillion"]
+        stats = game_stats(game, stats_entries(game, Result.query.all(), None), 135)
     assert stats["best"] == 510
     assert stats["average"] == 420
     assert stats["distribution"] == [("500+", 1), ("300+", 1)]
@@ -134,3 +135,22 @@ def test_travle_failed_summary(app):
         follow_redirects=True,
     )
     assert "Saved Travle #84: ✗ (3 away)".encode() in response.data
+
+
+LOLDLE = """I've completed all the modes of #LoLdle #1604 today:
+❓ Classic: 7
+💬 Quote: 1
+🔥 Ability: 3 🧠 ✓
+😀 Emoji: 2
+🎨 Splash: 2 ✓
+
+https://loldle.net"""
+
+
+def test_loldle_stats_per_mode(app):
+    anna = client_for(app, "anna")
+    response = anna.post("/submit", data={"text": LOLDLE}, follow_redirects=True)
+    assert "Saved LoLdle #1604: ❓7\n💬1\n🔥3\n😀2\n🎨2".encode() in response.data
+    page = anna.get("/stats").data.decode()
+    for title in ["❓ Classic", "💬 Quote", "🔥 Ability", "😀 Emoji", "🎨 Splash"]:
+        assert f"LoLdle {title}" in page
