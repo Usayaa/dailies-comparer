@@ -147,3 +147,27 @@ def test_real_wordle_de_failed():
     assert game.slug == "wordle-de"
     assert (r.puzzle, r.solved, r.score) == (362, False, None)
     assert len(r.details["grid"]) == 6  # light-mode ⬜ squares are kept too
+
+
+def test_real_connections_failed_without_and_with_one_group():
+    from types import SimpleNamespace
+
+    from app.games import GAMES
+
+    none = "Connections\nPuzzle #1266\n🟩🟦🟩🟩\n🟩🟩🟪🟩\n🟩🟦🟩🟪\n🟩🟦🟪🟩"
+    one = "Connections\nPuzzle #1266\n🟩🟦🟩🟩\n🟩🟦🟩🟩\n🟩🟩🟪🟩\n🟩🟩🟩🟩\n🟨🟦🟨🟦"
+    summaries = []
+    for text in (none, one):
+        game, r = detect(text)
+        assert (game.slug, r.puzzle, r.solved, r.score) == ("connections", 1266, False, 4)
+        summaries.append(GAMES["connections"].summary(SimpleNamespace(**vars(r))))
+    assert summaries == ["0/4", "1/4"]
+
+
+def test_connections_summary_solved():
+    from types import SimpleNamespace
+
+    from app.games import GAMES
+
+    _, r = detect("Connections\nPuzzle #512\n🟨🟨🟨🟨\n🟩🟦🟩🟩\n🟩🟩🟩🟩\n🟦🟦🟦🟦\n🟪🟪🟪🟪")
+    assert GAMES["connections"].summary(SimpleNamespace(**vars(r))) == "4/4 · 1✗"

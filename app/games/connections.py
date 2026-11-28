@@ -12,7 +12,8 @@ Example share text:
 
 Every row is one guess. A row with four identical colours is a correct group,
 anything else is a mistake. Four mistakes end the game.
-Score = number of mistakes (lower is better).
+Score = number of mistakes (lower is better). The table shows groups found out
+of 4, plus the mistakes for solved games: "4/4 · 1✗", "1/4" (lost).
 """
 
 import re
@@ -49,5 +50,9 @@ class Connections(Game):
         )
 
     def summary(self, result):
-        # Mistakes out of the 4 allowed; "4/4 ✗" therefore means lost.
-        return f"{result.score}/4 ✗"
+        # Groups found out of 4, e.g. "1/4" for a lost game with one group.
+        # A solved game always has 4/4, so the mistakes are added: "4/4 · 2✗".
+        groups = len(result.details.get("order", []))
+        if result.solved:
+            return f"4/4 · {result.score}✗"
+        return f"{groups}/4"
