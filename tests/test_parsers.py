@@ -171,3 +171,12 @@ def test_connections_summary_solved():
 
     _, r = detect("Connections\nPuzzle #512\n🟨🟨🟨🟨\n🟩🟦🟩🟩\n🟩🟩🟩🟩\n🟦🟦🟦🟦\n🟪🟪🟪🟪")
     assert GAMES["connections"].summary(SimpleNamespace(**vars(r))) == "4/4 · 1✗"
+
+
+def test_every_game_has_a_help_text():
+    from app.games import GAMES
+    from app.i18n import TEXTS
+
+    for slug in GAMES:
+        assert set(TEXTS[f"help_{slug}"]) == {"de", "en"}, slug
+        assert set(TEXTS[f"score_{slug}"]) == {"de", "en"}, slug

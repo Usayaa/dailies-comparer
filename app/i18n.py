@@ -83,6 +83,40 @@ TEXTS = {
         "de": "Serie = gelöste Rätsel mit aufeinanderfolgenden Nummern. Durchschnitt nur über gelöste Rätsel.",
         "en": "Streak = solved puzzles with consecutive numbers. Average over solved puzzles only.",
     },
+    # Short explanation of each game's score, shown under the game's heading.
+    # Every game in games/__init__.py needs a "help_<slug>" entry.
+    "help_wordle": {
+        "de": "Versuche bis zur Lösung. X = nicht gelöst, * = schwerer Modus.",
+        "en": "Guesses needed. X = not solved, * = hard mode.",
+    },
+    "help_wordle-de": {
+        "de": "Versuche bis zur Lösung. X = nicht gelöst.",
+        "en": "Guesses needed. X = not solved.",
+    },
+    "help_connections": {
+        "de": "Gefundene Gruppen von 4. Bei gelösten Rätseln dazu die Fehler: 4/4 · 1✗ = gelöst mit einem Fehler.",
+        "en": "Groups found out of 4. Solved puzzles also show the mistakes: 4/4 · 1✗ = solved with one mistake.",
+    },
+    "help_strands": {
+        "de": "Benutzte Hinweise (💡). Weniger ist besser.",
+        "en": "Hints used (💡). Fewer is better.",
+    },
+    "help_travle": {
+        "de": "Versuche über der kürzesten Route: +0 = perfekt. 💡 = benutzte Hinweise. ✗ (noch 2) = nicht geschafft, 2 Länder fehlten.",
+        "en": "Guesses beyond the shortest route: +0 = perfect. 💡 = hints used. ✗ (2 away) = failed, 2 countries short.",
+    },
+    "help_krillion": {
+        "de": "Punkte. Mehr ist besser.",
+        "en": "Points. Higher is better.",
+    },
+    "help_targon": {
+        "de": "Erreichte Höhe in Metern. Mehr ist besser.",
+        "en": "Height reached in metres. Higher is better.",
+    },
+    "help_loldle": {
+        "de": "Versuche pro Modus: ❓ Classic, 💬 Quote, 🔥 Ability, 😀 Emoji, 🎨 Splash. Weniger ist besser.",
+        "en": "Guesses per mode: ❓ Classic, 💬 Quote, 🔥 Ability, 😀 Emoji, 🎨 Splash. Fewer is better.",
+    },
     # Settings
     "settings_title": {"de": "Einstellungen", "en": "Settings"},
     "language": {"de": "Sprache", "en": "Language"},

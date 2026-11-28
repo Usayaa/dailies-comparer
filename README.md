@@ -44,7 +44,9 @@ A good order to read it in is `games/wordle.py` → `models.py` → `main.py` �
 1. Copy `app/games/wordle.py` to `app/games/newgame.py` and adapt `slug`,
    `name`, `url`, `parse()` and `summary()`.
 2. Add it to the list in `app/games/__init__.py`.
-3. Add a `score_<slug>` entry in `app/i18n.py` (the label on the stats page).
+3. Add a `score_<slug>` entry (the label on the stats page) and a
+   `help_<slug>` entry (the explanation under the game's heading) in
+   `app/i18n.py`.
 4. Add a test with a real share text to `tests/test_parsers.py`.
 
 ### Fixing a parser

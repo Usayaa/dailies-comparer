@@ -3,6 +3,7 @@
 {% block content %}
   <p><a href="{{ url_for('main.game', slug=game.slug) }}">← {{ game.name }}</a></p>
   <h1>{{ game.name }} #{{ puzzle }}</h1>
+  <p class="game-help muted small">{{ _("help_" ~ game.slug) }}</p>
 
   {% if current_user.hide_spoilers and puzzle not in played %}
     <p class="flash info">{{ _("play_first") }}</p>

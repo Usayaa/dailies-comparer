@@ -80,6 +80,14 @@ main { max-width: 960px; margin: 0 auto; padding: 1rem; }
   gap: 1rem;
   margin-bottom: 0.75rem;
 }
+.card > header a.muted {  /* long game links: cut off with "…" on phones */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.game-help { margin: -0.5rem 0 0.75rem; }
+h1 + .game-help { margin-top: -0.75rem; }
 .card.narrow { max-width: 480px; margin-left: auto; margin-right: auto; }
 .more, .pager { margin: 0.5rem 0 0; font-size: 0.875rem; display: flex; gap: 1rem; }
 
